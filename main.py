@@ -12,7 +12,7 @@ async def welcome(message: types.Message):
 
 @dp.message_handler(commands=['logo'])
 async def logo(message: types.Message):
-    await message.answer_photo('https://avatars.githubusercontent.com/u/62240649?v=4')
+    await message.answer_photo('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuz2BDT2OoYGewQiUQg2fWGhjM8PizG8vtJQ&s')
 
 @dp.message_handler()
 async def echo(message: types.Message):
