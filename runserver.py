@@ -1,5 +1,8 @@
 from flask import Flask, render_template_string
+from os import environ
 from threading import Thread
+
+port_ = int(environ.get('PORT', 8080))
 
 def runsite():    
     app = Flask(__name__)
@@ -57,8 +60,7 @@ def runsite():
         return render_template_string(html_content)
     
     if __name__ == '__main__':
-        app.run(debug=True, host='0.0.0.0', port=8080)
-
-def start_site():
+        app.run(debug=True,port=port_)
+def start_site():        
     t = Thread(target=runsite)
-    t.start()
+    t.start()    
