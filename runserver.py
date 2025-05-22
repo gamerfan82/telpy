@@ -1,7 +1,7 @@
 from flask import Flask, render_template_string
 from os import environ
 
-port_ = int(environ.get('PORT', 8080))
+port_ = 10000
 
 def runsite():    
     app = Flask(__name__)
