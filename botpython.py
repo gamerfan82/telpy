@@ -57,6 +57,37 @@ def build_name_keyboard(prefix: str):
         keyboard.insert(InlineKeyboardButton(name, callback_data=f"{prefix}:{name}"))
     return keyboard
 
+@dp.message_handler(commands=['transactions'])
+async def show_transactions_in_group(message: types.Message):
+    # فقط اجازه بده در گروه یا سوپرگروه اجرا بشه
+    if message.chat.type not in ['group', 'supergroup']:
+        await message.reply("❌ این دستور فقط در گروه‌ها قابل استفاده است.")
+        return
+
+    try:
+        with open(CSV_FILE, newline='', encoding='utf-8') as csvfile:
+            reader = list(csv.DictReader(csvfile))
+            if not reader:
+                await message.reply("⚠️ هنوز هیچ تراکنشی ثبت نشده.")
+                return
+
+            # تقسیم‌بندی پیام‌ها اگر زیاد بودن (هر پیام زیر 4096 کاراکتر)
+            text = "📋 لیست تراکنش‌ها:\n"
+            for i, row in enumerate(reader):
+                text += f"{i+1}. {row['فرستنده']} → {row['گیرنده']} ({row['مبلغ']} تومان) - {row['موضوع']}\n"
+
+            if len(text) > 4000:
+                # تقسیم به چند بخش
+                parts = [text[i:i+4000] for i in range(0, len(text), 4000)]
+                for part in parts:
+                    await message.answer(part)
+            else:
+                await message.reply(text)
+    except Exception as e:
+        await message.reply(f"❌ خطا در نمایش تراکنش‌ها: {e}")
+
+
+
 @dp.message_handler(commands=['start'])
 async def welcome(message: types.Message):
     kb = InlineKeyboardMarkup()
