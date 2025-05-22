@@ -3,6 +3,7 @@ from os import environ
 from threading import Thread
 
 port_ = int(environ.get('PORT', 8080))
+print(port_)
 
 def runsite():    
     app = Flask(__name__)
