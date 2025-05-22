@@ -159,14 +159,14 @@ async def show_report(call: types.CallbackQuery):
 async def remove_transaction(call: types.CallbackQuery, state: FSMContext):
     index = int(call.data.split(":")[1])
     delete_index[call.from_user.id] = index
-    await call.message.answer("برای حذف تراکنش، لطفاً عبارت \"حذف تراکنش\" را ارسال کن:")
+    await call.message.answer("برای حذف تراکنش، لطفاً عبارت \"حذف\" را ارسال کن:")
     await DeleteConfirm.confirm.set()
     await call.answer()
 
 @dp.message_handler(state=DeleteConfirm.confirm)
 async def confirm_deletion(message: types.Message, state: FSMContext):
     if message.text.strip() != "حذف تراکنش":
-        await message.answer("❌ حذف لغو شد. برای حذف باید دقیقاً عبارت \"حذف تراکنش\" را وارد کنی.")
+        await message.answer("❌ حذف لغو شد. برای حذف باید دقیقاً عبارت \"حذف\" را وارد کنی.")
         await state.finish()
         return
 
