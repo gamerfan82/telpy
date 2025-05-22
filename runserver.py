@@ -1,7 +1,7 @@
 from flask import Flask, render_template_string
 from os import environ
 
-port_ = 10000
+
 
 def runsite():    
     app = Flask(__name__)
@@ -59,5 +59,5 @@ def runsite():
         return render_template_string(html_content)
     
     if __name__ == '__main__':
-        app.run(debug=True,port=port_)
+        app.run(debug=True,port=10000)
     
