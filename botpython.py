@@ -11,7 +11,7 @@ from keep_alive import keep_alive
 keep_alive()
 
 PROXY_URL = "http://proxy.server:3128"
-bot = Bot(token="8021241750:AAEDJfbl2PdKplMz2rFVz7ACh1S1bFTcygs", proxy=PROXY_URL)
+bot = Bot(token="8021241750:AAEDJfbl2PdKplMz2rFVz7ACh1S1bFTcygs")
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 CSV_FILE = "transactions.csv"
