@@ -14,7 +14,7 @@ bot = Bot(token="8021241750:AAEDJfbl2PdKplMz2rFVz7ACh1S1bFTcygs")
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 CSV_FILE = "transactions.csv"
-USER_NAMES = ["عرفان", "علی", "حسین"]
+USER_NAMES = ["عرفان صادقی", "امیرحسین قلی نیا", "ابوالفضل محمدشاهی", "ماکان کریمیان", "ابوالفضل فرخ پور", "محمدرضا صمدی", "مهدی عباسی", "امین کاظمی"]
 USERS_FILE = "users.json"
 
 # تعریف کلاس وضعیت برای مراحل مختلف تراکنش
