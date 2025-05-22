@@ -8,6 +8,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from flask import Flask, render_template_string
+from threading import Thread
 
 def runsite():    
     app = Flask(__name__)
@@ -66,7 +67,10 @@ def runsite():
     
     if __name__ == '__main__':
         app.run(debug=True, host='0.0.0.0', port=8080)
-runsite()
+
+t = Thread(target=runsite)
+t.start()
+
 PROXY_URL = "http://proxy.server:3128"
 bot = Bot(token="8021241750:AAEDJfbl2PdKplMz2rFVz7ACh1S1bFTcygs")
 dp = Dispatcher(bot, storage=MemoryStorage())
