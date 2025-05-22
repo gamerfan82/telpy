@@ -1,4 +1,7 @@
 from flask import Flask, render_template_string
+from os import environ
+
+port_ = int(environ.get('PORT', 8080))
 
 def runsite():    
     app = Flask(__name__)
@@ -45,7 +48,7 @@ def runsite():
     <body>
       <div class="message-box">
         <div class="robot-icon">😎</div>
-        <h1>ربات با موفقیت روشن شد</h1>
+        <h1>ربات روشن هست</h1>
       </div>
     </body>
     </html>
@@ -56,5 +59,5 @@ def runsite():
         return render_template_string(html_content)
     
     if __name__ == '__main__':
-        app.run(debug=True,port=10000)
+        app.run(debug=True,port=port_)
     
