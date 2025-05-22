@@ -2,8 +2,6 @@ from flask import Flask, render_template_string
 from os import environ
 from threading import Thread
 
-port_ = int(environ.get('PORT', 8080))
-print(port_)
 
 def runsite():    
     app = Flask(__name__)
@@ -61,6 +59,8 @@ def runsite():
         return render_template_string(html_content)
     
     if __name__ == '__main__':
+        port_ = int(environ.get('PORT', 8080))
+        print(port_)
         app.run(debug=True,port=port_)
 def start_site():        
     t = Thread(target=runsite)
