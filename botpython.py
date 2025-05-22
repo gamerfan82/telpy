@@ -8,7 +8,7 @@ from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from runserver import runsite
-runsite()
+
 PROXY_URL = "http://proxy.server:3128"
 bot = Bot(token="8021241750:AAEDJfbl2PdKplMz2rFVz7ACh1S1bFTcygs")
 dp = Dispatcher(bot, storage=MemoryStorage())
