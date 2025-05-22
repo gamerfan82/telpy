@@ -237,7 +237,29 @@ async def confirm_deletion(message: types.Message, state: FSMContext):
                 for row in reader:
                     writer.writerow(row)
 
-            await message.answer(f"✅ تراکنش حذف شد:\n{removed['فرستنده']} --> {removed['گیرنده']} ({removed['مبلغ']}) - {removed['موضوع']}", reply_markup=main_menu())
+            await message.answer(f"✅ تراکنش حذف شد:\n{removed['فرستنده']} --> {removed['گیرنده']} ({removed['مبلغ']}) - {removed['موضوع']}", reply_markup=main_menu())            
+            try:
+                with open(CSV_FILE, newline='', encoding='utf-8') as csvfile:
+                    reader = list(csv.DictReader(csvfile))
+                    if not reader:
+                        await bot.edit_message_text(chat_id="-4839539389",message_id="640",text="⚠️ هنوز هیچ تراکنشی ثبت نشده.")
+                        return
+        
+                    # تقسیم‌بندی پیام‌ها اگر زیاد بودن (هر پیام زیر 4096 کاراکتر)
+                    text = "📋 لیست تراکنش‌ها:\n"
+                    for i, row in enumerate(reader):
+                        text += f"{i+1}. {row['فرستنده']} --> {row['گیرنده']} ({row['مبلغ']} تومان) - {row['موضوع']}\n"
+        
+                    if len(text) > 4000:
+                        # تقسیم به چند بخش
+                        parts = [text[i:i+4000] for i in range(0, len(text), 4000)]
+                        for part in parts:
+                            await bot.edit_message_text(chat_id="-4839539389",message_id="640",text=part)
+                    else:
+                        await bot.edit_message_text(chat_id="-4839539389",message_id="640",text=text)
+            except Exception as e:
+                    await bot.send_message(chat_id="-4839539389",text="خطا در نمایش تراکنش‌ها: {}".format(e))
+
         else:
             await message.answer("❗ تراکنش موردنظر پیدا نشد.")
     except Exception as e:
