@@ -11,7 +11,7 @@ from keep_alive import keep_alive
 keep_alive()
 
 PROXY_URL = "http://proxy.server:3128"
-bot = Bot(token="8021241750:AAEDJfbl2PdKplMz2rFVz7ACh1S1bFTcygs")
+bot = Bot(token="8021241750:AAEDJfbl2PdKplMz2rFVz7ACh1S1bFTcygs", proxy=PROXY_URL)
 dp = Dispatcher(bot, storage=MemoryStorage())
 
 CSV_FILE = "transactions.csv"
@@ -56,7 +56,7 @@ def build_name_keyboard(prefix: str):
     for name in USER_NAMES:
         keyboard.insert(InlineKeyboardButton(name, callback_data=f"{prefix}:{name}"))
     return keyboard
-
+#-4839539389
 @dp.message_handler(commands=['transactions'])
 async def show_transactions_in_group(message: types.Message):
     # فقط اجازه بده در گروه یا سوپرگروه اجرا بشه
@@ -156,10 +156,32 @@ async def subject_received(message: types.Message, state: FSMContext):
                 users[receiver],
                 f"📥 تراکنش جدید:\n{sender} باید برای تو {amount} تومان ارسال کنه.\nموضوع: {subject}"
             )
+
         except Exception as e:
             print(f"خطا در ارسال پیام به {receiver}: {e}")
 
     await state.finish()
+    try:
+        with open(CSV_FILE, newline='', encoding='utf-8') as csvfile:
+            reader = list(csv.DictReader(csvfile))
+            if not reader:
+                await bot.edit_message_text(chat_id="-4839539389",message_id="640",text="⚠️ هنوز هیچ تراکنشی ثبت نشده.")
+                return
+
+            # تقسیم‌بندی پیام‌ها اگر زیاد بودن (هر پیام زیر 4096 کاراکتر)
+            text = "📋 لیست تراکنش‌ها:\n"
+            for i, row in enumerate(reader):
+                text += f"{i+1}. {row['فرستنده']} --> {row['گیرنده']} ({row['مبلغ']} تومان) - {row['موضوع']}\n"
+
+            if len(text) > 4000:
+                # تقسیم به چند بخش
+                parts = [text[i:i+4000] for i in range(0, len(text), 4000)]
+                for part in parts:
+                    await bot.edit_message_text(chat_id="-4839539389",message_id="640",text=part)
+            else:
+                await bot.edit_message_text(chat_id="-4839539389",message_id="640",text=text)
+    except Exception as e:
+        await bot.send_message(chat_id="-4839539389",text="خطا در نمایش تراکنش‌ها: {}".format(e))
     await message.answer("✅ تراکنش با موفقیت ثبت شد.", reply_markup=main_menu())
 
 @dp.callback_query_handler(lambda c: c.data == "show_report")
@@ -223,4 +245,3 @@ async def confirm_deletion(message: types.Message, state: FSMContext):
     await state.finish()
 if __name__ == '__main__':
     executor.start_polling(dp)
-
