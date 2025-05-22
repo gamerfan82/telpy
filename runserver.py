@@ -1,7 +1,4 @@
 from flask import Flask, render_template_string
-from os import environ
-
-
 
 def runsite():    
     app = Flask(__name__)
